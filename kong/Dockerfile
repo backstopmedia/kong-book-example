@@ -22,6 +22,17 @@ RUN apk update \
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
+RUN luarocks install busted
+RUN ln -s /usr/local/openresty/bin/resty /usr/local/bin/resty
+RUN mkdir -p /home/kong/bin
+RUN mkdir -p /home/kong/spec
+
+COPY busted /home/kong/bin/busted
+RUN chmod 755 /home/kong/bin/busted
+
+COPY helpers.lua /home/kong/spec/helpers.lua
+COPY kong_tests.conf /home/kong/spec/kong_tests.conf
+
 EXPOSE 8000 8443 8001 8444
 
 STOPSIGNAL SIGTERM
