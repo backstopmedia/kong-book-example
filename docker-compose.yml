@@ -15,35 +15,35 @@ services:
 
   kong-migration:
     build: ./kong
-    volumes:
-      - ../kong-notification-plugin/kong/plugins/notification:/usr/local/share/lua/5.1/kong/plugins/notification:ro
+    # volumes:
+    #   - ../kong-notification-plugin/kong/plugins/notification:/usr/local/share/lua/5.1/kong/plugins/notification:ro
     links:
       - kong-postgres
     environment:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-postgres
-      - KONG_CUSTOM_PLUGINS=notification
+      # - KONG_CUSTOM_PLUGINS=notification
     command: kong migrations up
 
-  kong-migration-test:
-    build: ./kong
-    volumes:
-      - ../kong-notification-plugin/kong/plugins/notification:/usr/local/share/lua/5.1/kong/plugins/notification:ro
-    links:
-      - kong-postgres-test
-    environment:
-      - KONG_DATABASE=postgres
-      - KONG_PG_HOST=kong-postgres-test
-      - KONG_PG_DATABASE=kong_tests
-      - KONG_CUSTOM_PLUGINS=notification
-    command: kong migrations up
+  # kong-migration-test:
+  #   build: ./kong
+  #   volumes:
+  #     - ../kong-notification-plugin/kong/plugins/notification:/usr/local/share/lua/5.1/kong/plugins/notification:ro
+  #   links:
+  #     - kong-postgres-test
+  #   environment:
+  #     - KONG_DATABASE=postgres
+  #     - KONG_PG_HOST=kong-postgres-test
+  #     - KONG_PG_DATABASE=kong_tests
+  #     - KONG_CUSTOM_PLUGINS=notification
+  #   command: kong migrations up
 
   kong:
     build: ./kong
-    volumes:
-      - ../kong-notification-plugin/kong/plugins/notification:/usr/local/share/lua/5.1/kong/plugins/notification:ro
-      - ../kong-notification-plugin/spec/handler_spec.lua:/home/kong/spec/handler_spec.lua:ro
-      - ../kong-notification-plugin/spec/01-access_spec.lua:/home/kong/spec/01-access_spec.lua:ro
+    # volumes:
+    #   - ../kong-notification-plugin/kong/plugins/notification:/usr/local/share/lua/5.1/kong/plugins/notification:ro
+    #   - ../kong-notification-plugin/spec/handler_spec.lua:/home/kong/spec/handler_spec.lua:ro
+    #   - ../kong-notification-plugin/spec/01-access_spec.lua:/home/kong/spec/01-access_spec.lua:ro
     environment:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-postgres
@@ -53,17 +53,17 @@ services:
       - KONG_PROXY_ERROR_LOG=/dev/stderr
       - KONG_ADMIN_ERROR_LOG=/dev/stderr
       - KONG_ADMIN_LISTEN=0.0.0.0:8001
-      - KONG_CUSTOM_PLUGINS=notification
+      # - KONG_CUSTOM_PLUGINS=notification
     links:
       - movies
       - bookings
       - showtimes
       - users
       - kong-postgres
-      - kong-postgres-test
+      # - kong-postgres-test
     depends_on:
       - kong-migration
-      - kong-migration-test
+      # - kong-migration-test
     ports:
       - "9000:8000"
       - "9001:8001"
@@ -76,13 +76,13 @@ services:
     ports:
       - "5433:5432"
 
-  kong-postgres-test:
-    image: postgres:alpine
-    environment:
-      - POSTGRES_DB=kong_tests
-      - POSTGRES_USER=kong
-    ports:
-      - "5434:5432"
+  # kong-postgres-test:
+  #   image: postgres:alpine
+  #   environment:
+  #     - POSTGRES_DB=kong_tests
+  #     - POSTGRES_USER=kong
+  #   ports:
+  #     - "5434:5432"
 
   movies:
     build: ./movies
